@@ -2,6 +2,9 @@ package utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -48,6 +51,29 @@ public class Config {
 
 	public void setEntry(String key, Object value) {
 		entries.put(key, value);
+	}
+
+	public void save() {
+		try {
+			RandomAccessFile raf = new RandomAccessFile(cfgFile, "rw");
+			raf.setLength(0);
+			raf.close();
+			PrintWriter pw = new PrintWriter(cfgFile);
+			entries.forEach((key, value) -> {
+				try {
+					pw.println(key + "=" + value);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }
